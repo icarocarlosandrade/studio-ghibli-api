@@ -23,7 +23,7 @@ public class FeatureFilmService {
 		if (result.isPresent()) {
 			featureFilm = result.get();
 		} else {
-			throw new RuntimeException("Film not found (Id = " + id + ")");
+			throw new RuntimeException("Feature film not found (Id = " + id + ")");
 		}
 		return featureFilm;
 	}

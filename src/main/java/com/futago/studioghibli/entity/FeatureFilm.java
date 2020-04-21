@@ -1,15 +1,19 @@
 package com.futago.studioghibli.entity;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
+
 
 @Entity
 @Table(name = "feature_film")
@@ -26,10 +30,6 @@ public class FeatureFilm {
 	@Column(name = "year")
 	private String year;
 
-	@Basic(optional = false)
-	@Column(name = "title")
-	private String title;
-
 	@Column(name = "director")
 	private String director;
 
@@ -45,4 +45,7 @@ public class FeatureFilm {
 	@Column(name = "running_time")
 	private String runningTime;
 
+	@JoinColumn(name = "titles_id", referencedColumnName = "id")
+	@OneToOne(cascade = CascadeType.ALL)
+	private Titles titles;
 }

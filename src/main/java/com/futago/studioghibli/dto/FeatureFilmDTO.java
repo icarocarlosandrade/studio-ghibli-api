@@ -19,7 +19,7 @@ public class FeatureFilmDTO {
 	public FeatureFilmDTO(FeatureFilm featureFilm) {
 		this.id = featureFilm.getId();
 		this.year = featureFilm.getYear();
-		this.title = featureFilm.getTitle();
+		this.title = featureFilm.getTitles().getJapanese() + " [" + featureFilm.getTitles().getHepburn() + "]";
 		this.director = featureFilm.getDirector();
 		this.screenwriter = featureFilm.getScreenwriter();
 		this.producer = featureFilm.getProducer();

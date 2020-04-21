@@ -9,7 +9,10 @@ public class FeatureFilmDTO {
 
 	private Integer id;
 	private String year;
-	private String title;
+	private String japanese;
+	private String hepburn;
+	private String english;
+	private String portuguese;
 	private String director;
 	private String screenwriter;
 	private String producer;
@@ -19,7 +22,10 @@ public class FeatureFilmDTO {
 	public FeatureFilmDTO(FeatureFilm featureFilm) {
 		this.id = featureFilm.getId();
 		this.year = featureFilm.getYear();
-		this.title = featureFilm.getTitles().getJapanese() + " [" + featureFilm.getTitles().getHepburn() + "]";
+		this.japanese = featureFilm.getTitles().getJapanese();
+		this.hepburn = featureFilm.getTitles().getHepburn();
+		this.english = featureFilm.getTitles().getEnglish();
+		this.portuguese = featureFilm.getTitles().getPortuguese();
 		this.director = featureFilm.getDirector();
 		this.screenwriter = featureFilm.getScreenwriter();
 		this.producer = featureFilm.getProducer();

@@ -56,34 +56,6 @@ public class FeatureFilmRestController {
 		return buildListOfDTO(films);
 	}
 
-	public List<FeatureFilmDTO> findByDirector() {
-		List<FeatureFilm> films = featureFilmService.findAll();
-		List<FeatureFilmDTO> filmsDTO = new ArrayList<>();
-
-		if (!films.isEmpty()) {
-			for (FeatureFilm film : films) {
-				FeatureFilmDTO filmDTO = new FeatureFilmDTO(film);
-				filmsDTO.add(filmDTO);
-			}
-		}
-
-		return filmsDTO;
-	}
-
-	public List<FeatureFilmDTO> findAll() {
-		List<FeatureFilm> films = featureFilmService.findAll();
-		List<FeatureFilmDTO> filmsDTO = new ArrayList<>();
-
-		if (!films.isEmpty()) {
-			for (FeatureFilm film : films) {
-				FeatureFilmDTO filmDTO = new FeatureFilmDTO(film);
-				filmsDTO.add(filmDTO);
-			}
-		}
-
-		return filmsDTO;
-	}
-
 	private List<FeatureFilmDTO> buildListOfDTO(List<FeatureFilm> films) {
 		List<FeatureFilmDTO> filmsDTO = new ArrayList<>();
 

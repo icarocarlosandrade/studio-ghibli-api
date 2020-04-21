@@ -31,12 +31,16 @@ public class FeatureFilmService {
 	public List<FeatureFilm> findAll() {
 		return featureFilmRepository.findAll();
 	}
-	
+
 	public List<FeatureFilm> findByYear(String year) {
 		return featureFilmRepository.findByYear(year);
 	}
 
 	public List<FeatureFilm> findByDirector(String director) {
 		return featureFilmRepository.findByDirectorContaining(director);
+	}
+
+	public List<FeatureFilm> findByTitle(String title) {
+		return featureFilmRepository.findByTitle(title);
 	}
 }

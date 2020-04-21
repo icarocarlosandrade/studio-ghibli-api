@@ -30,11 +30,12 @@ public class FeatureFilmRestController {
 
 	@GetMapping
 	public List<FeatureFilmDTO> find(@RequestParam(value = "year", required = false) String year,
-			@RequestParam(value = "director", required = false) String director) {
+			@RequestParam(value = "director", required = false) String director,
+			@RequestParam(value = "title", required = false) String title) {
 
 		List<FeatureFilm> films = new ArrayList<>();
 
-		if (year == null || director == null) {
+		if (year == null || director == null || title == null) {
 			if (year != null) {
 				films = featureFilmService.findByYear(year);
 			}
@@ -43,7 +44,11 @@ public class FeatureFilmRestController {
 				films = featureFilmService.findByDirector(director);
 			}
 
-			if (year == null && director == null) {
+			if (title != null) {
+				films = featureFilmService.findByTitle(title);
+			}
+
+			if (year == null && director == null && title == null) {
 				films = featureFilmService.findAll();
 			}
 		}

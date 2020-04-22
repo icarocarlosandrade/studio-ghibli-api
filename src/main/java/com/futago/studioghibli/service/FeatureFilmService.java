@@ -12,8 +12,12 @@ import com.futago.studioghibli.repository.FeatureFilmRepository;
 @Service
 public class FeatureFilmService {
 
-	@Autowired
 	private FeatureFilmRepository featureFilmRepository;
+	
+	@Autowired
+	public FeatureFilmService(FeatureFilmRepository featureFilmRepository) {
+		this.featureFilmRepository = featureFilmRepository;
+	}
 
 	public FeatureFilm findById(Integer id) {
 		FeatureFilm featureFilm = null;

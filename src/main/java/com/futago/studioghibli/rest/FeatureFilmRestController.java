@@ -18,8 +18,12 @@ import com.futago.studioghibli.service.FeatureFilmService;
 @RequestMapping("/featurefilm")
 public class FeatureFilmRestController {
 
-	@Autowired
 	private FeatureFilmService featureFilmService;
+
+	@Autowired
+	public FeatureFilmRestController(FeatureFilmService featureFilmService) {
+		this.featureFilmService = featureFilmService;
+	}
 
 	@GetMapping("{id}")
 	public FeatureFilmDTO findById(@PathVariable Integer id) {

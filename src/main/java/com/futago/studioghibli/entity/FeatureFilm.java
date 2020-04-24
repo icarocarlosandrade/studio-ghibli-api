@@ -20,7 +20,7 @@ public class FeatureFilm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, updatable = false)
-	private Integer id;
+	private Long id;
 
 	private String year;
 

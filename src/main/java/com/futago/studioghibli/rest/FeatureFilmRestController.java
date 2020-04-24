@@ -26,7 +26,7 @@ public class FeatureFilmRestController {
 	}
 
 	@GetMapping("{id}")
-	public FeatureFilmDTO findById(@PathVariable Integer id) {
+	public FeatureFilmDTO findById(@PathVariable Long id) {
 		FeatureFilm film = featureFilmService.findById(id);
 		FeatureFilmDTO filmDTO = new FeatureFilmDTO(film);
 		return filmDTO;

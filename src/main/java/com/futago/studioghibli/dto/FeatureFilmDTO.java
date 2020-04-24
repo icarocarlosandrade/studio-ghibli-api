@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class FeatureFilmDTO {
 
-	private Integer id;
+	private Long id;
 	private String year;
 	private String japanese;
 	private String hepburn;

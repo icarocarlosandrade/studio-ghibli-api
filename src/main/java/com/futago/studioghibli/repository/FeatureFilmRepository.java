@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.futago.studioghibli.entity.FeatureFilm;
 
-public interface FeatureFilmRepository extends JpaRepository<FeatureFilm, Integer> {
+public interface FeatureFilmRepository extends JpaRepository<FeatureFilm, Long> {
 
 	List<FeatureFilm> findByYear(String year);
 

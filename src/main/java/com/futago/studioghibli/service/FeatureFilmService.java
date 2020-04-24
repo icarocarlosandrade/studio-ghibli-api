@@ -19,7 +19,7 @@ public class FeatureFilmService {
 		this.featureFilmRepository = featureFilmRepository;
 	}
 
-	public FeatureFilm findById(Integer id) {
+	public FeatureFilm findById(Long id) {
 		FeatureFilm featureFilm = null;
 
 		Optional<FeatureFilm> result = featureFilmRepository.findById(id);

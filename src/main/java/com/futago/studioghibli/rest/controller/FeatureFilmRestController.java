@@ -17,102 +17,77 @@ import com.futago.studioghibli.entity.FeatureFilm;
 import com.futago.studioghibli.exception.NotFoundException;
 import com.futago.studioghibli.rest.dto.FeatureFilmDTO;
 import com.futago.studioghibli.rest.dto.FeatureFilmMapper;
+import com.futago.studioghibli.rest.filter.FeatureFilmFilter;
 import com.futago.studioghibli.service.FeatureFilmService;
 
 @RestController
 @RequestMapping("/featurefilm")
 public class FeatureFilmRestController {
 
-	private FeatureFilmService featureFilmService;
+	private FeatureFilmService service;
 
 	@Autowired
 	public FeatureFilmRestController(FeatureFilmService featureFilmService) {
-		this.featureFilmService = featureFilmService;
+		this.service = featureFilmService;
 	}
 
 	@PostMapping
-	public FeatureFilmDTO save(@RequestBody FeatureFilmDTO featureFilmDTO) {
+	public FeatureFilmDTO save(@RequestBody FeatureFilmDTO filmDTO) {
 		// Isso deveria ser injetado?
-		FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
-		FeatureFilm featureFilm = featureFilmMapper.toEntity(featureFilmDTO);
-		featureFilm.setId(0L);
-		featureFilm = featureFilmService.save(featureFilm);
-		featureFilmDTO.setId(featureFilm.getId());
-		return featureFilmDTO;
+		FeatureFilmMapper mapper = new FeatureFilmMapper();
+		FeatureFilm film = mapper.toEntity(filmDTO);
+		film.setId(0L);
+		film = service.save(film);
+		filmDTO.setId(film.getId());
+		return filmDTO;
 	}
-	
+
 	@PutMapping
-	public FeatureFilmDTO update(@RequestBody FeatureFilmDTO featureFilmDTO) {
-		if (featureFilmDTO.getId() == null) {
+	public FeatureFilmDTO update(@RequestBody FeatureFilmDTO filmDTO) {
+		if (filmDTO.getId() == null) {
 			// Deveria ser Bad Request
 			throw new NotFoundException("Id is null");
 		}
-		
+
 		// Isso deveria ser injetado?
-		FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
-		FeatureFilm featureFilm = featureFilmMapper.toEntity(featureFilmDTO);
-		featureFilm = featureFilmService.save(featureFilm);
-		return featureFilmDTO;
+		FeatureFilmMapper mapper = new FeatureFilmMapper();
+		FeatureFilm film = mapper.toEntity(filmDTO);
+		film = service.save(film);
+		return filmDTO;
 	}
 
 	@GetMapping("{id}")
 	public FeatureFilmDTO findById(@PathVariable Long id) {
-		FeatureFilm featureFilm = featureFilmService.findById(id);
+		FeatureFilm film = service.findById(id);
 
 		// Isso deveria estar aqui ou no Service?
-		if (featureFilm == null) {
+		if (film == null) {
 			throw new NotFoundException("Feature film not found (Id = " + id + ")");
 		}
 
 		// Isso deveria ser injetado?
-		FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
+		FeatureFilmMapper mapper = new FeatureFilmMapper();
 
-		FeatureFilmDTO filmDTO = featureFilmMapper.toDTO(featureFilm);
+		FeatureFilmDTO filmDTO = mapper.toDTO(film);
 		return filmDTO;
 	}
 
 	@GetMapping
-	public List<FeatureFilmDTO> find(@RequestParam(value = "year", required = false) String year,
-			@RequestParam(value = "director", required = false) String director,
-			@RequestParam(value = "title", required = false) String title) {
-
-		List<FeatureFilm> featureFilmList = new ArrayList<>();
-
-		if (year == null || director == null || title == null) {
-			if (year != null) {
-				featureFilmList = featureFilmService.findByYear(year);
-			}
-
-			if (director != null) {
-				featureFilmList = featureFilmService.findByDirector(director);
-			}
-
-			if (title != null) {
-				featureFilmList = featureFilmService.findByTitle(title);
-			}
-
-			if (year == null && director == null && title == null) {
-				featureFilmList = featureFilmService.findAll();
-			}
-		}
-
-		return buildListOfDTO(featureFilmList);
+	public List<FeatureFilmDTO> findFeatureFilmByFilter(
+			@RequestParam(value = "filter", required = false) FeatureFilmFilter filter) {
+		return buildListOfDTO(service.getByFilter(filter));
 	}
 
-	private List<FeatureFilmDTO> buildListOfDTO(List<FeatureFilm> featureFilmList) {
-		List<FeatureFilmDTO> featureFilmDTOList = new ArrayList<>();
+	private List<FeatureFilmDTO> buildListOfDTO(List<FeatureFilm> filmList) {
+		List<FeatureFilmDTO> filmDTOList = new ArrayList<>();
 
-		if (!featureFilmList.isEmpty()) {
-
+		if (!filmList.isEmpty()) {
 			// Isso deveria ser injetado?
-			FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
-
-			for (FeatureFilm featureFilm : featureFilmList) {
-				FeatureFilmDTO featureFilmDTO = featureFilmMapper.toDTO(featureFilm);
-				featureFilmDTOList.add(featureFilmDTO);
-			}
+			FeatureFilmMapper mapper = new FeatureFilmMapper();
+			
+			filmList.forEach(film -> filmDTOList.add(mapper.toDTO(film)));
 		}
-
-		return featureFilmDTOList;
+		
+		return filmDTOList;
 	}
 }

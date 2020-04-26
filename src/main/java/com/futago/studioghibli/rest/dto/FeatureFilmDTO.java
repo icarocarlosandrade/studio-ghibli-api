@@ -1,4 +1,4 @@
-package com.futago.studioghibli.dto;
+package com.futago.studioghibli.rest.dto;
 
 import com.futago.studioghibli.entity.FeatureFilm;
 

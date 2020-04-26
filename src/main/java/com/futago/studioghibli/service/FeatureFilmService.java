@@ -13,7 +13,7 @@ import com.futago.studioghibli.repository.FeatureFilmRepository;
 public class FeatureFilmService {
 
 	private FeatureFilmRepository featureFilmRepository;
-	
+
 	@Autowired
 	public FeatureFilmService(FeatureFilmRepository featureFilmRepository) {
 		this.featureFilmRepository = featureFilmRepository;
@@ -26,9 +26,8 @@ public class FeatureFilmService {
 
 		if (result.isPresent()) {
 			featureFilm = result.get();
-		} else {
-			throw new RuntimeException("Feature film not found (Id = " + id + ")");
 		}
+
 		return featureFilm;
 	}
 

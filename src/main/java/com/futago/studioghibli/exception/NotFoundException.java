@@ -1,4 +1,4 @@
-package com.futago.studioghibli.rest.exception;
+package com.futago.studioghibli.exception;
 
 public class NotFoundException extends RuntimeException {
 

@@ -19,6 +19,10 @@ public class FeatureFilmService {
 		this.featureFilmRepository = featureFilmRepository;
 	}
 
+	public FeatureFilm save(FeatureFilm featureFilm) {
+		return featureFilmRepository.save(featureFilm);
+	}
+
 	public FeatureFilm findById(Long id) {
 		FeatureFilm featureFilm = null;
 

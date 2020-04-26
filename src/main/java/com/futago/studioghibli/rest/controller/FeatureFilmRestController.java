@@ -6,14 +6,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.futago.studioghibli.entity.FeatureFilm;
+import com.futago.studioghibli.exception.NotFoundException;
 import com.futago.studioghibli.rest.dto.FeatureFilmDTO;
 import com.futago.studioghibli.rest.dto.FeatureFilmMapper;
-import com.futago.studioghibli.rest.exception.NotFoundException;
 import com.futago.studioghibli.service.FeatureFilmService;
 
 @RestController
@@ -27,10 +30,36 @@ public class FeatureFilmRestController {
 		this.featureFilmService = featureFilmService;
 	}
 
+	@PostMapping
+	public FeatureFilmDTO save(@RequestBody FeatureFilmDTO featureFilmDTO) {
+		// Isso deveria ser injetado?
+		FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
+		FeatureFilm featureFilm = featureFilmMapper.toEntity(featureFilmDTO);
+		featureFilm.setId(0L);
+		featureFilm = featureFilmService.save(featureFilm);
+		featureFilmDTO.setId(featureFilm.getId());
+		return featureFilmDTO;
+	}
+	
+	@PutMapping
+	public FeatureFilmDTO update(@RequestBody FeatureFilmDTO featureFilmDTO) {
+		if (featureFilmDTO.getId() == null) {
+			// Deveria ser Bad Request
+			throw new NotFoundException("Id is null");
+		}
+		
+		// Isso deveria ser injetado?
+		FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
+		FeatureFilm featureFilm = featureFilmMapper.toEntity(featureFilmDTO);
+		featureFilm = featureFilmService.save(featureFilm);
+		return featureFilmDTO;
+	}
+
 	@GetMapping("{id}")
 	public FeatureFilmDTO findById(@PathVariable Long id) {
 		FeatureFilm featureFilm = featureFilmService.findById(id);
 
+		// Isso deveria estar aqui ou no Service?
 		if (featureFilm == null) {
 			throw new NotFoundException("Feature film not found (Id = " + id + ")");
 		}
@@ -74,10 +103,10 @@ public class FeatureFilmRestController {
 		List<FeatureFilmDTO> featureFilmDTOList = new ArrayList<>();
 
 		if (!featureFilmList.isEmpty()) {
-			
+
 			// Isso deveria ser injetado?
 			FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
-			
+
 			for (FeatureFilm featureFilm : featureFilmList) {
 				FeatureFilmDTO featureFilmDTO = featureFilmMapper.toDTO(featureFilm);
 				featureFilmDTOList.add(featureFilmDTO);

@@ -27,6 +27,7 @@ public class FeatureFilmMapper {
 		FeatureFilm featureFilm = new FeatureFilm();
 		featureFilm.setTitles(new Titles());
 
+		featureFilm.setId(featureFilmDTO.getId());
 		featureFilm.setYear(featureFilmDTO.getYear());
 		featureFilm.getTitles().setJapanese(featureFilmDTO.getJapanese());
 		featureFilm.getTitles().setHepburn(featureFilmDTO.getHepburn());

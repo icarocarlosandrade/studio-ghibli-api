@@ -1,4 +1,4 @@
-package com.futago.studioghibli.rest.exception;
+package com.futago.studioghibli.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

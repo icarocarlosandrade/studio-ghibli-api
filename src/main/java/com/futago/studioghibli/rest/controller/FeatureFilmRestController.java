@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.futago.studioghibli.entity.FeatureFilm;
 import com.futago.studioghibli.rest.dto.FeatureFilmDTO;
+import com.futago.studioghibli.rest.dto.FeatureFilmMapper;
 import com.futago.studioghibli.rest.exception.NotFoundException;
 import com.futago.studioghibli.service.FeatureFilmService;
 
@@ -28,13 +29,16 @@ public class FeatureFilmRestController {
 
 	@GetMapping("{id}")
 	public FeatureFilmDTO findById(@PathVariable Long id) {
-		FeatureFilm film = featureFilmService.findById(id);
-		
-		if (film == null) {
+		FeatureFilm featureFilm = featureFilmService.findById(id);
+
+		if (featureFilm == null) {
 			throw new NotFoundException("Feature film not found (Id = " + id + ")");
 		}
-		
-		FeatureFilmDTO filmDTO = new FeatureFilmDTO(film);
+
+		// Isso deveria ser injetado?
+		FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
+
+		FeatureFilmDTO filmDTO = featureFilmMapper.toDTO(featureFilm);
 		return filmDTO;
 	}
 
@@ -43,39 +47,43 @@ public class FeatureFilmRestController {
 			@RequestParam(value = "director", required = false) String director,
 			@RequestParam(value = "title", required = false) String title) {
 
-		List<FeatureFilm> films = new ArrayList<>();
+		List<FeatureFilm> featureFilmList = new ArrayList<>();
 
 		if (year == null || director == null || title == null) {
 			if (year != null) {
-				films = featureFilmService.findByYear(year);
+				featureFilmList = featureFilmService.findByYear(year);
 			}
 
 			if (director != null) {
-				films = featureFilmService.findByDirector(director);
+				featureFilmList = featureFilmService.findByDirector(director);
 			}
 
 			if (title != null) {
-				films = featureFilmService.findByTitle(title);
+				featureFilmList = featureFilmService.findByTitle(title);
 			}
 
 			if (year == null && director == null && title == null) {
-				films = featureFilmService.findAll();
+				featureFilmList = featureFilmService.findAll();
 			}
 		}
 
-		return buildListOfDTO(films);
+		return buildListOfDTO(featureFilmList);
 	}
 
-	private List<FeatureFilmDTO> buildListOfDTO(List<FeatureFilm> films) {
-		List<FeatureFilmDTO> filmsDTO = new ArrayList<>();
+	private List<FeatureFilmDTO> buildListOfDTO(List<FeatureFilm> featureFilmList) {
+		List<FeatureFilmDTO> featureFilmDTOList = new ArrayList<>();
 
-		if (!films.isEmpty()) {
-			for (FeatureFilm film : films) {
-				FeatureFilmDTO filmDTO = new FeatureFilmDTO(film);
-				filmsDTO.add(filmDTO);
+		if (!featureFilmList.isEmpty()) {
+			
+			// Isso deveria ser injetado?
+			FeatureFilmMapper featureFilmMapper = new FeatureFilmMapper();
+			
+			for (FeatureFilm featureFilm : featureFilmList) {
+				FeatureFilmDTO featureFilmDTO = featureFilmMapper.toDTO(featureFilm);
+				featureFilmDTOList.add(featureFilmDTO);
 			}
 		}
 
-		return filmsDTO;
+		return featureFilmDTOList;
 	}
 }

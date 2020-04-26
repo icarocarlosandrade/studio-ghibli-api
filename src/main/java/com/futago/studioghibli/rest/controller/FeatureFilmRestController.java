@@ -13,67 +13,42 @@ import org.springframework.web.bind.annotation.RestController;
 import com.futago.studioghibli.entity.FeatureFilm;
 import com.futago.studioghibli.rest.dto.FeatureFilmDTO;
 import com.futago.studioghibli.rest.exception.NotFoundException;
+import com.futago.studioghibli.rest.filter.FeatureFilmFilter;
 import com.futago.studioghibli.service.FeatureFilmService;
 
 @RestController
 @RequestMapping("/featurefilm")
 public class FeatureFilmRestController {
 
-	private FeatureFilmService featureFilmService;
+	private FeatureFilmService service;
 
 	@Autowired
 	public FeatureFilmRestController(FeatureFilmService featureFilmService) {
-		this.featureFilmService = featureFilmService;
+		this.service = featureFilmService;
 	}
 
 	@GetMapping("{id}")
 	public FeatureFilmDTO findById(@PathVariable Long id) {
-		FeatureFilm film = featureFilmService.findById(id);
-		
+		FeatureFilm film = service.findById(id);
+
 		if (film == null) {
 			throw new NotFoundException("Feature film not found (Id = " + id + ")");
 		}
-		
+
 		FeatureFilmDTO filmDTO = new FeatureFilmDTO(film);
 		return filmDTO;
 	}
 
 	@GetMapping
-	public List<FeatureFilmDTO> find(@RequestParam(value = "year", required = false) String year,
-			@RequestParam(value = "director", required = false) String director,
-			@RequestParam(value = "title", required = false) String title) {
-
-		List<FeatureFilm> films = new ArrayList<>();
-
-		if (year == null || director == null || title == null) {
-			if (year != null) {
-				films = featureFilmService.findByYear(year);
-			}
-
-			if (director != null) {
-				films = featureFilmService.findByDirector(director);
-			}
-
-			if (title != null) {
-				films = featureFilmService.findByTitle(title);
-			}
-
-			if (year == null && director == null && title == null) {
-				films = featureFilmService.findAll();
-			}
-		}
-
-		return buildListOfDTO(films);
+	public List<FeatureFilmDTO> find(@RequestParam(value = "filter", required = false) FeatureFilmFilter filter) {
+		return buildListOfDTO(service.getByFilter(filter));
 	}
 
 	private List<FeatureFilmDTO> buildListOfDTO(List<FeatureFilm> films) {
 		List<FeatureFilmDTO> filmsDTO = new ArrayList<>();
 
 		if (!films.isEmpty()) {
-			for (FeatureFilm film : films) {
-				FeatureFilmDTO filmDTO = new FeatureFilmDTO(film);
-				filmsDTO.add(filmDTO);
-			}
+			films.forEach(film -> filmsDTO.add(new FeatureFilmDTO(film)));
 		}
 
 		return filmsDTO;

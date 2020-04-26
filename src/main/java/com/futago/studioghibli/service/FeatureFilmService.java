@@ -8,21 +8,22 @@ import org.springframework.stereotype.Service;
 
 import com.futago.studioghibli.entity.FeatureFilm;
 import com.futago.studioghibli.repository.FeatureFilmRepository;
+import com.futago.studioghibli.rest.filter.FeatureFilmFilter;
 
 @Service
 public class FeatureFilmService {
 
-	private FeatureFilmRepository featureFilmRepository;
+	private FeatureFilmRepository repository;
 
 	@Autowired
 	public FeatureFilmService(FeatureFilmRepository featureFilmRepository) {
-		this.featureFilmRepository = featureFilmRepository;
+		this.repository = featureFilmRepository;
 	}
 
 	public FeatureFilm findById(Long id) {
 		FeatureFilm featureFilm = null;
 
-		Optional<FeatureFilm> result = featureFilmRepository.findById(id);
+		Optional<FeatureFilm> result = repository.findById(id);
 
 		if (result.isPresent()) {
 			featureFilm = result.get();
@@ -32,18 +33,10 @@ public class FeatureFilmService {
 	}
 
 	public List<FeatureFilm> findAll() {
-		return featureFilmRepository.findAll();
+		return repository.findAll();
 	}
 
-	public List<FeatureFilm> findByYear(String year) {
-		return featureFilmRepository.findByYear(year);
-	}
-
-	public List<FeatureFilm> findByDirector(String director) {
-		return featureFilmRepository.findByDirectorContaining(director);
-	}
-
-	public List<FeatureFilm> findByTitle(String title) {
-		return featureFilmRepository.findByTitle(title);
+	public List<FeatureFilm> getByFilter(FeatureFilmFilter filter) {
+		return repository.getByFilter(filter);
 	}
 }

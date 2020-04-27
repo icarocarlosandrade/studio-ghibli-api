@@ -17,16 +17,16 @@ public class FeatureFilmFilterConverter extends PropertyEditorSupport {
 
 	@Override
 	public void setAsText(final String text) {
-		setValue(converterFiltro(text));
+		setValue(convertFilter(text));
 	}
 
-	private FeatureFilmFilter converterFiltro(String filter) {
+	private FeatureFilmFilter convertFilter(String filter) {
 		try {
 			return new ObjectMapper().registerModule(new JavaTimeModule())
 					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 					.readValue(filter, FeatureFilmFilter.class);
 		} catch (Exception e) {
-			String erro = "Erro ao converter filtro.";
+			String erro = "Error on converting filter";
 			log.error(erro, e);
 			throw new IllegalArgumentException(erro);
 		}

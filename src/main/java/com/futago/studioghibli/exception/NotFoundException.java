@@ -1,5 +1,6 @@
 package com.futago.studioghibli.exception;
 
+@SuppressWarnings("serial")
 public class NotFoundException extends RuntimeException {
 
 	public NotFoundException() {

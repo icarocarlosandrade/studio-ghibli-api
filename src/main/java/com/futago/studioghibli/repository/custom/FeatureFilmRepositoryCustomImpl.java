@@ -13,7 +13,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.futago.studioghibli.entity.FeatureFilm;
+import com.futago.studioghibli.entity.FeatureFilm_;
 import com.futago.studioghibli.entity.Titles;
+import com.futago.studioghibli.entity.Titles_;
 import com.futago.studioghibli.rest.filter.FeatureFilmFilter;
 
 public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCustom {
@@ -30,7 +32,7 @@ public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCus
 
 		List<Predicate> predicates = getPredicates(cb, featureFilmRoot, filter);
 		criteriaQuery.select(featureFilmRoot).where(predicates.toArray(new Predicate[predicates.size()]));
-		criteriaQuery.orderBy(cb.asc(featureFilmRoot.get("id")));
+		criteriaQuery.orderBy(cb.asc(featureFilmRoot.get(FeatureFilm_.id)));
 
 		TypedQuery<FeatureFilm> query = em.createQuery(criteriaQuery);
 		return query.setMaxResults(100).getResultList();
@@ -42,24 +44,30 @@ public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCus
 
 		if (filter != null) {
 			if (filter.getDirector() != null) {
-				predicates.add(cb.and(cb.equal(featureFilmRoot.get("director"), filter.getDirector())));
+				String directorLike = "%" + filter.getDirector().toUpperCase() + "%";
+				
+				Predicate directorPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.director)), directorLike);
+				
+				predicates.add(cb.and(directorPredicate));
 			}
 
 			if (filter.getYear() != null) {
-				predicates.add(cb.and(cb.equal(featureFilmRoot.get("year"), filter.getYear())));
+				Predicate yearPredicate = cb.equal(featureFilmRoot.get(FeatureFilm_.year), filter.getYear());
+				
+				predicates.add(cb.and(yearPredicate));
 			}
 
 			if (filter.getTitle() != null) {
-				Join<FeatureFilm, Titles> titles = featureFilmRoot.join("titles");
+				Join<FeatureFilm, Titles> titles = featureFilmRoot.join(FeatureFilm_.titles);
 
-				String title = "%" + filter.getTitle().toUpperCase() + "%";
+				String titleLike = "%" + filter.getTitle().toUpperCase() + "%";
 
-				Predicate predicateJapanese = cb.like(cb.upper(titles.get("japanese")), title);
-				Predicate predicateHepburn = cb.like(cb.upper(titles.get("hepburn")), title);
-				Predicate predicateEnglish = cb.like(cb.upper(titles.get("english")), title);
-				Predicate predicatePortuguese = cb.like(cb.upper(titles.get("portuguese")), title);
+				Predicate japaneseTitlePredicate = cb.like(cb.upper(titles.get(Titles_.japanese)), titleLike);
+				Predicate hepburnTitlePredicate = cb.like(cb.upper(titles.get(Titles_.hepburn)), titleLike);
+				Predicate englishTitlePredicate = cb.like(cb.upper(titles.get(Titles_.english)), titleLike);
+				Predicate portugueseTitlePredicate = cb.like(cb.upper(titles.get(Titles_.portuguese)), titleLike);
 
-				predicates.add(cb.or(predicateJapanese, predicateHepburn, predicateEnglish, predicatePortuguese));
+				predicates.add(cb.or(japaneseTitlePredicate, hepburnTitlePredicate, englishTitlePredicate, portugueseTitlePredicate));
 			}
 		}
 

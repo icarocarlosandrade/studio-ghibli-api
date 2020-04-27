@@ -73,9 +73,9 @@ public class FeatureFilmRestController {
 	}
 
 	@GetMapping
-	public List<FeatureFilmDTO> findFeatureFilmByFilter(
+	public List<FeatureFilmDTO> findByFilter(
 			@RequestParam(value = "filter", required = false) FeatureFilmFilter filter) {
-		return buildListOfDTO(service.getByFilter(filter));
+		return buildListOfDTO(service.findByFilter(filter));
 	}
 
 	private List<FeatureFilmDTO> buildListOfDTO(List<FeatureFilm> filmList) {

@@ -7,5 +7,5 @@ import com.futago.studioghibli.rest.filter.FeatureFilmFilter;
 
 public interface FeatureFilmRepositoryCustom {
 
-	List<FeatureFilm> getByFilter(FeatureFilmFilter filter);
+	List<FeatureFilm> findByFilter(FeatureFilmFilter filter);
 }

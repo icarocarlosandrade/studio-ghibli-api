@@ -36,11 +36,7 @@ public class FeatureFilmService {
 		return featureFilm;
 	}
 
-	public List<FeatureFilm> findAll() {
-		return repository.findAll();
-	}
-
-	public List<FeatureFilm> getByFilter(FeatureFilmFilter filter) {
-		return repository.getByFilter(filter);
+	public List<FeatureFilm> findByFilter(FeatureFilmFilter filter) {
+		return repository.findByFilter(filter);
 	}
 }

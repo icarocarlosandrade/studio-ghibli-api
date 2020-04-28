@@ -57,38 +57,97 @@ public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCus
 		List<Predicate> predicates = new ArrayList<>();
 
 		if (filter != null) {
-			if (filter.getDirector() != null) {
-				String directorLike = "%" + filter.getDirector().toUpperCase() + "%";
-
-				Predicate directorPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.director)),
-						directorLike);
-
-				predicates.add(cb.and(directorPredicate));
+			if (filter.getTitle() != null) {
+				predicates.add(getTitlePredicate(cb, featureFilmRoot, filter));
 			}
 
 			if (filter.getYear() != null) {
-				Predicate yearPredicate = cb.equal(featureFilmRoot.get(FeatureFilm_.year), filter.getYear());
-
-				predicates.add(cb.and(yearPredicate));
+				predicates.add(getYearPredicate(cb, featureFilmRoot, filter));
 			}
 
-			if (filter.getTitle() != null) {
-				// Create an inner join
-				Join<FeatureFilm, Titles> titles = featureFilmRoot.join(FeatureFilm_.titles);
+			if (filter.getDirector() != null) {
+				predicates.add(getDirectorPredicate(cb, featureFilmRoot, filter));
+			}
 
-				String titleLike = "%" + filter.getTitle().toUpperCase() + "%";
+			if (filter.getScreenwriter() != null) {
+				predicates.add(getScreenwriterPredicate(cb, featureFilmRoot, filter));
+			}
 
-				Predicate japaneseTitlePredicate = cb.like(cb.upper(titles.get(Titles_.japanese)), titleLike);
-				Predicate hepburnTitlePredicate = cb.like(cb.upper(titles.get(Titles_.hepburn)), titleLike);
-				Predicate englishTitlePredicate = cb.like(cb.upper(titles.get(Titles_.english)), titleLike);
-				Predicate portugueseTitlePredicate = cb.like(cb.upper(titles.get(Titles_.portuguese)), titleLike);
+			if (filter.getProducer() != null) {
+				predicates.add(getProducerPredicate(cb, featureFilmRoot, filter));
+			}
 
-				// Create a disjunction of the given restriction predicates
-				predicates.add(cb.or(japaneseTitlePredicate, hepburnTitlePredicate, englishTitlePredicate,
-						portugueseTitlePredicate));
+			if (filter.getMusic() != null) {
+				predicates.add(getMusicPredicate(cb, featureFilmRoot, filter));
 			}
 		}
 
 		return predicates;
+	}
+
+	private Predicate getTitlePredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
+			FeatureFilmFilter filter) {
+
+		// Create an inner join
+		Join<FeatureFilm, Titles> titles = featureFilmRoot.join(FeatureFilm_.titles);
+
+		String titleLike = "%" + filter.getTitle().toUpperCase() + "%";
+
+		Predicate japaneseTitlePredicate = cb.like(cb.upper(titles.get(Titles_.japanese)), titleLike);
+		Predicate hepburnTitlePredicate = cb.like(cb.upper(titles.get(Titles_.hepburn)), titleLike);
+		Predicate englishTitlePredicate = cb.like(cb.upper(titles.get(Titles_.english)), titleLike);
+		Predicate portugueseTitlePredicate = cb.like(cb.upper(titles.get(Titles_.portuguese)), titleLike);
+
+		// Create a disjunction of the given restriction predicates
+		return cb.or(japaneseTitlePredicate, hepburnTitlePredicate, englishTitlePredicate, portugueseTitlePredicate);
+	}
+
+	private Predicate getYearPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
+			FeatureFilmFilter filter) {
+
+		Predicate yearPredicate = cb.equal(featureFilmRoot.get(FeatureFilm_.year), filter.getYear());
+
+		return cb.and(yearPredicate);
+	}
+
+	private Predicate getDirectorPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
+			FeatureFilmFilter filter) {
+
+		String directorLike = "%" + filter.getDirector().toUpperCase() + "%";
+
+		Predicate directorPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.director)), directorLike);
+
+		return cb.and(directorPredicate);
+	}
+
+	private Predicate getScreenwriterPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
+			FeatureFilmFilter filter) {
+
+		String screenwriterLike = "%" + filter.getScreenwriter().toUpperCase() + "%";
+
+		Predicate screenwriterPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.screenwriter)),
+				screenwriterLike);
+
+		return cb.and(screenwriterPredicate);
+	}
+
+	private Predicate getProducerPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
+			FeatureFilmFilter filter) {
+
+		String producerLike = "%" + filter.getProducer().toUpperCase() + "%";
+
+		Predicate producerPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.producer)), producerLike);
+
+		return cb.and(producerPredicate);
+	}
+
+	private Predicate getMusicPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
+			FeatureFilmFilter filter) {
+
+		String musicLike = "%" + filter.getMusic().toUpperCase() + "%";
+
+		Predicate musicPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.music)), musicLike);
+
+		return cb.and(musicPredicate);
 	}
 }

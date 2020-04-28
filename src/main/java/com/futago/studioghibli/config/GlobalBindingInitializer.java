@@ -11,7 +11,7 @@ import com.futago.studioghibli.rest.filter.converter.FeatureFilmFilterConverter;
 public class GlobalBindingInitializer {
 
 	@InitBinder
-	public void initBinder(final WebDataBinder webdataBinder) {
-		webdataBinder.registerCustomEditor(FeatureFilmFilter.class, new FeatureFilmFilterConverter());
+	public void initBinder(final WebDataBinder binder) {
+		binder.registerCustomEditor(FeatureFilmFilter.class, new FeatureFilmFilterConverter());
 	}
 }

@@ -34,16 +34,16 @@ public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCus
 		CriteriaQuery<FeatureFilm> criteriaQuery = cb.createQuery(FeatureFilm.class);
 
 		// A root type in the from clause. Query roots always reference entities
-		Root<FeatureFilm> featureFilmRoot = criteriaQuery.from(FeatureFilm.class);
+		Root<FeatureFilm> root = criteriaQuery.from(FeatureFilm.class);
 
 		// The type of a simple or compound predicate
-		List<Predicate> predicates = getPredicates(cb, featureFilmRoot, filter);
+		List<Predicate> predicates = getPredicates(cb, root, filter);
 
 		// The select and where clauses
-		criteriaQuery.select(featureFilmRoot).where(predicates.toArray(new Predicate[predicates.size()]));
+		criteriaQuery.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 
 		// The order by clause
-		criteriaQuery.orderBy(cb.asc(featureFilmRoot.get(FeatureFilm_.id)));
+		criteriaQuery.orderBy(cb.asc(root.get(FeatureFilm_.id)));
 
 		// Create an instance of TypedQuery for executing a criteria query
 		TypedQuery<FeatureFilm> query = em.createQuery(criteriaQuery);
@@ -51,45 +51,41 @@ public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCus
 		return query.setMaxResults(100).getResultList();
 	}
 
-	private List<Predicate> getPredicates(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
-			FeatureFilmFilter filter) {
-
+	private List<Predicate> getPredicates(CriteriaBuilder cb, Root<FeatureFilm> root, FeatureFilmFilter filter) {
 		List<Predicate> predicates = new ArrayList<>();
 
 		if (filter != null) {
 			if (filter.getTitle() != null) {
-				predicates.add(getTitlePredicate(cb, featureFilmRoot, filter));
+				predicates.add(getTitlePredicate(cb, root, filter));
 			}
 
 			if (filter.getYear() != null) {
-				predicates.add(getYearPredicate(cb, featureFilmRoot, filter));
+				predicates.add(getYearPredicate(cb, root, filter));
 			}
 
 			if (filter.getDirector() != null) {
-				predicates.add(getDirectorPredicate(cb, featureFilmRoot, filter));
+				predicates.add(getDirectorPredicate(cb, root, filter));
 			}
 
 			if (filter.getScreenwriter() != null) {
-				predicates.add(getScreenwriterPredicate(cb, featureFilmRoot, filter));
+				predicates.add(getScreenwriterPredicate(cb, root, filter));
 			}
 
 			if (filter.getProducer() != null) {
-				predicates.add(getProducerPredicate(cb, featureFilmRoot, filter));
+				predicates.add(getProducerPredicate(cb, root, filter));
 			}
 
 			if (filter.getMusic() != null) {
-				predicates.add(getMusicPredicate(cb, featureFilmRoot, filter));
+				predicates.add(getMusicPredicate(cb, root, filter));
 			}
 		}
 
 		return predicates;
 	}
 
-	private Predicate getTitlePredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
-			FeatureFilmFilter filter) {
-
+	private Predicate getTitlePredicate(CriteriaBuilder cb, Root<FeatureFilm> root, FeatureFilmFilter filter) {
 		// Create an inner join
-		Join<FeatureFilm, Titles> titles = featureFilmRoot.join(FeatureFilm_.titles);
+		Join<FeatureFilm, Titles> titles = root.join(FeatureFilm_.titles);
 
 		String titleLike = "%" + filter.getTitle().toUpperCase() + "%";
 
@@ -102,51 +98,40 @@ public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCus
 		return cb.or(japaneseTitlePredicate, hepburnTitlePredicate, englishTitlePredicate, portugueseTitlePredicate);
 	}
 
-	private Predicate getYearPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
-			FeatureFilmFilter filter) {
-
-		Predicate yearPredicate = cb.equal(featureFilmRoot.get(FeatureFilm_.year), filter.getYear());
+	private Predicate getYearPredicate(CriteriaBuilder cb, Root<FeatureFilm> root, FeatureFilmFilter filter) {
+		Predicate yearPredicate = cb.equal(root.get(FeatureFilm_.year), filter.getYear());
 
 		return cb.and(yearPredicate);
 	}
 
-	private Predicate getDirectorPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
-			FeatureFilmFilter filter) {
-
+	private Predicate getDirectorPredicate(CriteriaBuilder cb, Root<FeatureFilm> root, FeatureFilmFilter filter) {
 		String directorLike = "%" + filter.getDirector().toUpperCase() + "%";
 
-		Predicate directorPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.director)), directorLike);
+		Predicate directorPredicate = cb.like(cb.upper(root.get(FeatureFilm_.director)), directorLike);
 
 		return cb.and(directorPredicate);
 	}
 
-	private Predicate getScreenwriterPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
-			FeatureFilmFilter filter) {
-
+	private Predicate getScreenwriterPredicate(CriteriaBuilder cb, Root<FeatureFilm> root, FeatureFilmFilter filter) {
 		String screenwriterLike = "%" + filter.getScreenwriter().toUpperCase() + "%";
 
-		Predicate screenwriterPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.screenwriter)),
-				screenwriterLike);
+		Predicate screenwriterPredicate = cb.like(cb.upper(root.get(FeatureFilm_.screenwriter)), screenwriterLike);
 
 		return cb.and(screenwriterPredicate);
 	}
 
-	private Predicate getProducerPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
-			FeatureFilmFilter filter) {
-
+	private Predicate getProducerPredicate(CriteriaBuilder cb, Root<FeatureFilm> root, FeatureFilmFilter filter) {
 		String producerLike = "%" + filter.getProducer().toUpperCase() + "%";
 
-		Predicate producerPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.producer)), producerLike);
+		Predicate producerPredicate = cb.like(cb.upper(root.get(FeatureFilm_.producer)), producerLike);
 
 		return cb.and(producerPredicate);
 	}
 
-	private Predicate getMusicPredicate(CriteriaBuilder cb, Root<FeatureFilm> featureFilmRoot,
-			FeatureFilmFilter filter) {
-
+	private Predicate getMusicPredicate(CriteriaBuilder cb, Root<FeatureFilm> root, FeatureFilmFilter filter) {
 		String musicLike = "%" + filter.getMusic().toUpperCase() + "%";
 
-		Predicate musicPredicate = cb.like(cb.upper(featureFilmRoot.get(FeatureFilm_.music)), musicLike);
+		Predicate musicPredicate = cb.like(cb.upper(root.get(FeatureFilm_.music)), musicLike);
 
 		return cb.and(musicPredicate);
 	}

@@ -36,7 +36,6 @@ public class FeatureFilmRestController {
 		// TODO Isso deveria ser injetado?
 		FeatureFilmMapper mapper = new FeatureFilmMapper();
 		FeatureFilm film = mapper.toEntity(filmDTO);
-		film.setId(0L);
 		film = service.save(film);
 		filmDTO.setId(film.getId());
 		return filmDTO;
@@ -52,7 +51,7 @@ public class FeatureFilmRestController {
 		// TODO Isso deveria ser injetado?
 		FeatureFilmMapper mapper = new FeatureFilmMapper();
 		FeatureFilm film = mapper.toEntity(filmDTO);
-		film = service.save(film);
+		film = service.update(film);
 		return filmDTO;
 	}
 

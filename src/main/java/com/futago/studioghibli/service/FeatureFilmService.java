@@ -21,19 +21,22 @@ public class FeatureFilmService {
 	}
 
 	public FeatureFilm save(FeatureFilm featureFilm) {
+		featureFilm.setId(0L);
+		return repository.save(featureFilm);
+	}
+
+	public FeatureFilm update(FeatureFilm featureFilm) {
 		return repository.save(featureFilm);
 	}
 
 	public FeatureFilm findById(Long id) {
-		FeatureFilm featureFilm = null;
-
 		Optional<FeatureFilm> result = repository.findById(id);
 
 		if (result.isPresent()) {
-			featureFilm = result.get();
+			return result.get();
 		}
 
-		return featureFilm;
+		return null;
 	}
 
 	public List<FeatureFilm> findByFilter(FeatureFilmFilter filter) {

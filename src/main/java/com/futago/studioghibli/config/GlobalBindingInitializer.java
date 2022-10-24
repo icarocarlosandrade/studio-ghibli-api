@@ -4,8 +4,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import com.futago.studioghibli.rest.filter.FeatureFilmFilter;
-import com.futago.studioghibli.rest.filter.converter.FeatureFilmFilterConverter;
+import com.futago.studioghibli.api.filter.FeatureFilmFilter;
+import com.futago.studioghibli.api.filter.converter.FeatureFilmFilterConverter;
 
 @ControllerAdvice
 public class GlobalBindingInitializer {

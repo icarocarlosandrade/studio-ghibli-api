@@ -25,7 +25,7 @@ public class FeatureFilmRepositoryCustomImpl implements FeatureFilmRepositoryCus
 	private EntityManager em;
 
 	@Override
-	public List<FeatureFilm> findAllByFilter(FeatureFilmFilter filter) {
+	public List<FeatureFilm> findByFilter(FeatureFilmFilter filter) {
 		// The CriteriaBuilder interface serves as the main factory of criteria queries
 		// and criteria query elements
 		CriteriaBuilder cb = em.getCriteriaBuilder();

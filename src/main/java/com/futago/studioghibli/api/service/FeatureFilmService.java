@@ -31,7 +31,7 @@ public class FeatureFilmService {
 
 	public List<FeatureFilmDTO> getAllByFilter(FeatureFilmFilter filter) {
 		List<FeatureFilmDTO> featureFilmDTOList = new ArrayList<>();
-		List<FeatureFilm> featureFilmList = repository.findAllByFilter(filter);
+		List<FeatureFilm> featureFilmList = repository.findByFilter(filter);
 		featureFilmList.forEach(featureFilm -> featureFilmDTOList.add(mapper.toDTO(featureFilm)));
 		return featureFilmDTOList;
 	}

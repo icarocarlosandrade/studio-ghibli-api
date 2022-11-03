@@ -41,7 +41,7 @@ public class FeatureFilmResource {
 	}
 
 	@GetMapping
-	public List<FeatureFilmDTO> findByFilter(
+	public List<FeatureFilmDTO> getByFilter(
 			@RequestParam(value = "filter", required = false) FeatureFilmFilter filter) {
 		return service.getAllByFilter(filter);
 	}
